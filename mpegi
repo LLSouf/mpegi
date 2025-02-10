@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ] 
+	then 	for f in *; do
+				echo ============================
+				echo $f
+				echo ----------------------------
+				ffprobe -v quiet -show_entries format=size,duration -of default=noprint_wrappers=1 "$f"
+				echo ----------------------------
+				video=$(ffprobe -v quiet -show_entries stream=width,height,codec_long_name,display_aspect_ratio,time_base,r_frame_rate,bit_rate,nb_frame,sample_rate,channel_layout,pix_fmt,sample_fmt,profile,handler_name,codec_tag_string,bit_rate, -select_streams v -of default=noprint_wrappers=1 "$f")
+				audio=$(ffprobe -v quiet -show_entries stream=codec_long_name,time_base,bit_rate,sample_rate,channel_layout,pix_fmt,sample_fmt,profile,handler_name,codec_tag_string,bit_rate, -select_streams a -of default=noprint_wrappers=1 "$f")
+				printf "%-30s%20s\n" "$video" $audio
+				
+				echo ============================
+			done
+	else 		echo ============================
+				echo $1
+				echo ============================
+				ffprobe -v quiet -show_entries format=size,duration -of default=noprint_wrappers=1 "$1"
+				echo ----------------------------
+				echo VIDEO
+				echo ----------------------------
+				ffprobe -v quiet -show_entries stream=width,height,codec_long_name,display_aspect_ratio,time_base,r_frame_rate,bit_rate,nb_frame,sample_rate,channel_layout,pix_fmt,sample_fmt,profile,handler_name,codec_tag_string,bit_rate, -select_streams v -of default=noprint_wrappers=1 "$1"
+				echo ----------------------------
+				echo AUDIO
+				echo ----------------------------
+				ffprobe -v quiet -show_entries stream=codec_long_name,time_base,bit_rate,sample_rate,channel_layout,pix_fmt,sample_fmt,profile,handler_name,codec_tag_string,bit_rate, -select_streams a -of default=noprint_wrappers=1 "$1"
+fi
+
+
+
+
